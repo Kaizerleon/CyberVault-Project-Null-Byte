@@ -1,0 +1,40 @@
+{
+  "project": "CyberVault: Project Null Byte",
+  "contributor_folder": "it24102454",
+  "visibility": "public-documentation-only",
+  "status": "challenge-artifacts-tested-locally-web-integration-pending",
+  "entries": [
+    {
+      "web_stage_id": "STG-02",
+      "author_folder_id": "stage02",
+      "title": "Hidden in Plain Sight",
+      "domain": "Steganography",
+      "difficulty": "Easy",
+      "delivery": "release-gated-evidence-image",
+      "suggested_points": 100,
+      "unlock_after": "confirm-with-platform-team"
+    },
+    {
+      "web_stage_id": "STG-03",
+      "author_folder_id": "stage03",
+      "title": "Broken Cipher",
+      "domain": "Cryptography",
+      "difficulty": "Moderate",
+      "delivery": "release-gated-intercept-file",
+      "suggested_points": 200,
+      "depends_on_recovered_information_from": "STG-02"
+    },
+    {
+      "web_stage_id": "STG-06",
+      "author_folder_id": "stage04",
+      "title": "Misconfigured Permissions",
+      "domain": "Linux / System Security",
+      "difficulty": "Moderate-Hard",
+      "delivery": "isolated-ssh-challenge-service",
+      "suggested_points": 300,
+      "connection": "configured-privately-by-platform-admin",
+      "unlock_after": "confirm-with-platform-team"
+    }
+  ],
+  "private_items": "shared-separately-with-authorized-platform-maintainers"
+}
