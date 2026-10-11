@@ -1,0 +1,571 @@
+/* ==========================================================================
+   CyberVault: Project Null Byte - Main Stylesheet
+   ========================================================================== */
+
+/* ---------- CSS Variables & Theme Palettes ---------- */
+:root {
+  --bg: #0a0e17;
+  --surface: #111827;
+  --raised: #1a2433;
+  --line: #263449;
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+  --green: #00ff9d;
+  --blue: #00b4ff;
+  --orange: #ffa500;
+  --red: #ff6565;
+}
+
+body.light {
+  --bg: #eef3f7;
+  --surface: #ffffff;
+  --raised: #e6edf3;
+  --line: #c8d4df;
+  --text: #182638;
+  --muted: #526277;
+  --green: #087f55;
+  --blue: #096ba3;
+  --orange: #ac6600;
+  --red: #bb3535;
+}
+
+/* ---------- Base Global Styles ---------- */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--bg);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Cyber Matrix Grid Background */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(#00b4ff08 1px, transparent 1px),
+    linear-gradient(90deg, #00b4ff08 1px, transparent 1px);
+  background-size: 38px 38px;
+  z-index: 0;
+}
+
+/* Scanline Overlay */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 3px, #ffffff04 4px);
+  z-index: 5;
+}
+
+/* ---------- Typography & Utility Classes ---------- */
+.mono {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, monospace;
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.raised {
+  background: var(--raised);
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.accent {
+  color: var(--green);
+}
+
+.blue {
+  color: var(--blue);
+}
+
+.warning {
+  color: var(--orange);
+}
+
+.danger-text {
+  color: var(--red);
+}
+
+.hidden-force {
+  display: none !important;
+}
+
+/* ---------- Buttons & Actions ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  border: 1px solid var(--line);
+  background: var(--raised);
+  color: var(--text);
+  padding: 11px 15px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--green);
+  transform: translateY(-2px);
+  color: var(--text);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn.primary {
+  background: #00d97e;
+  color: #07140e;
+  border-color: #00d97e;
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: #00ff9d;
+  border-color: #00ff9d;
+  box-shadow: 0 0 16px rgba(0, 255, 157, 0.35);
+}
+
+.btn.danger {
+  background: #51232b;
+  border-color: #a24551;
+  color: #ffffff;
+}
+
+.btn.danger:hover:not(:disabled) {
+  background: #6e2a36;
+  border-color: #ff6565;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue) !important;
+  outline-offset: 3px;
+}
+
+/* ---------- Navigation ---------- */
+.nav-link {
+  color: var(--muted);
+  padding: 9px 12px;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  color: var(--text);
+}
+
+.nav-link.active {
+  color: var(--green);
+  border-color: var(--green);
+}
+
+/* ---------- Forms & Inputs ---------- */
+.field {
+  width: 100%;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.field:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 1px var(--green);
+}
+
+/* ---------- Badges & Chips ---------- */
+.chip {
+  border: 1px solid var(--line);
+  background: var(--raised);
+  padding: 5px 10px;
+  border-radius: 7px;
+  font-size: 11px;
+  font-family: 'Fira Code', monospace;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.badge-easy {
+  color: #00ff9d;
+}
+
+.badge-moderate {
+  color: #facc15;
+}
+
+.badge-hard {
+  color: #ffa500;
+}
+
+.badge-expert {
+  color: #ff6565;
+}
+
+/* ---------- Challenge Cards ---------- */
+.challenge-card {
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.challenge-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 217, 126, 0.6);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.challenge-card::before {
+  content: "";
+  position: absolute;
+  right: -28px;
+  top: -40px;
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  background: rgba(0, 255, 157, 0.04);
+}
+
+/* ---------- Hero & Auth Backgrounds ---------- */
+.hero-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.22;
+  filter: saturate(0.7);
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--surface) 4%, rgba(17, 24, 39, 0.93) 42%, rgba(17, 24, 39, 0.27));
+}
+
+.login-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.18;
+}
+
+.login-glow {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(110deg, rgba(10, 14, 23, 0.93), rgba(10, 14, 23, 0.67), rgba(0, 44, 48, 0.33));
+}
+
+/* ---------- Data Tables ---------- */
+.scroll-table {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 650px;
+  text-align: left;
+}
+
+th, td {
+  padding: 14px 13px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+th {
+  color: var(--muted);
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* ---------- Interactive Terminal ---------- */
+.terminal-output {
+  min-height: 155px;
+  max-height: 280px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: 12px/1.7 'Fira Code', monospace;
+  color: #a8f5cc;
+  border: 1px solid var(--line);
+}
+
+/* ---------- Status Indicators & Icons ---------- */
+.dot {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 12px var(--green);
+  display: inline-block;
+}
+
+.logo-mark {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--green);
+  color: var(--green);
+  border-radius: 10px;
+  background: rgba(0, 255, 157, 0.08);
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.1);
+}
+
+/* ---------- Dialogs & Modals ---------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 7, 13, 0.86);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(7px);
+}
+
+.modal-box {
+  width: min(100%, 500px);
+  box-shadow: 0 28px 90px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 255, 157, 0.33);
+}
+
+/* ---------- Toast Notifications ---------- */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 110;
+  max-width: min(400px, calc(100% - 40px));
+  background: var(--raised);
+  border: 1px solid var(--blue);
+  color: var(--text);
+  padding: 14px 18px;
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+  animation: slideToast 0.3s ease-out;
+}
+
+@keyframes slideToast {
+  from {
+    transform: translateY(15px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ---------- Responsive Breakpoints ---------- */
+@media (max-width: 850px) {
+  .desktop-nav {
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 4px;
+  }
+  .topbar {
+    flex-wrap: wrap;
+  }
+  .hero-overlay {
+    background: linear-gradient(90deg, rgba(17, 24, 39, 0.93), rgba(17, 24, 39, 0.67));
+  }
+}
+
+/* ==========================================================================
+   CyberVault: Operator Login Background & Cyber Atmosphere
+   ========================================================================== */
+
+#entry {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  background-color: #080D17;
+  background-image: url('../assets/images/cyber-login-bg.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow: hidden;
+}
+
+/* Vignette overlay: deepens center 50% for maximum login card readability and focus */
+.login-backdrop-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 50% 50%, rgba(8, 13, 23, 0.38) 0%, rgba(8, 13, 23, 0.70) 52%, rgba(8, 13, 23, 0.94) 100%),
+    linear-gradient(180deg, rgba(8, 13, 23, 0.55) 0%, transparent 22%, transparent 78%, rgba(8, 13, 23, 0.85) 100%);
+  z-index: 1;
+}
+
+/* Subtle holographic technical grid on outer borders only */
+.login-grid-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: 
+    linear-gradient(to right, rgba(0, 214, 143, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(35, 137, 255, 0.035) 1px, transparent 1px);
+  background-size: 50px 50px;
+  mask-image: radial-gradient(ellipse at 50% 50%, transparent 42%, black 85%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 50%, transparent 42%, black 85%);
+  z-index: 2;
+}
+
+/* Subtle corner ambient glows (cyber neon green & deep teal / electric blue) */
+.login-ambient-glow {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(85px);
+  z-index: 2;
+}
+
+.login-glow-bottom-left {
+  bottom: -80px;
+  left: -80px;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(0, 214, 143, 0.22) 0%, rgba(0, 191, 166, 0.08) 50%, transparent 70%);
+  animation: subtlePulseLeft 10s ease-in-out infinite alternate;
+}
+
+.login-glow-top-right {
+  top: -90px;
+  right: -90px;
+  width: 520px;
+  height: 520px;
+  background: radial-gradient(circle, rgba(0, 191, 166, 0.18) 0%, rgba(35, 137, 255, 0.10) 50%, transparent 70%);
+  animation: subtlePulseRight 12s ease-in-out infinite alternate;
+}
+
+.login-glow-bottom-right {
+  bottom: -60px;
+  right: -60px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(35, 137, 255, 0.15) 0%, rgba(0, 214, 143, 0.06) 50%, transparent 70%);
+  animation: subtlePulseLeft 14s ease-in-out infinite alternate;
+}
+
+/* Subtle floating cyber network node pulses */
+.login-node-pulse {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #00D68F;
+  box-shadow: 0 0 10px #00D68F, 0 0 20px rgba(0, 214, 143, 0.4);
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.5;
+  animation: nodeBlink 6s ease-in-out infinite alternate;
+}
+
+.node-1 { top: 18%; left: 12%; animation-delay: 0s; }
+.node-2 { top: 76%; left: 8%; animation-delay: 2.5s; background: #00BFA6; box-shadow: 0 0 10px #00BFA6; }
+.node-3 { top: 24%; right: 10%; animation-delay: 1.2s; background: #2389FF; box-shadow: 0 0 10px #2389FF; }
+.node-4 { top: 82%; right: 14%; animation-delay: 3.8s; }
+
+@keyframes subtlePulseLeft {
+  0% { transform: scale(1) translate(0, 0); opacity: 0.22; }
+  50% { transform: scale(1.08) translate(10px, -10px); opacity: 0.36; }
+  100% { transform: scale(0.96) translate(-5px, 8px); opacity: 0.20; }
+}
+
+@keyframes subtlePulseRight {
+  0% { transform: scale(1) translate(0, 0); opacity: 0.20; }
+  50% { transform: scale(1.06) translate(-12px, 12px); opacity: 0.32; }
+  100% { transform: scale(0.95) translate(8px, -6px); opacity: 0.18; }
+}
+
+@keyframes nodeBlink {
+  0%, 100% { opacity: 0.20; transform: scale(0.85); }
+  50% { opacity: 0.70; transform: scale(1.2); }
+}
+
+/* Mobile & Tablet Optimizations */
+@media (max-width: 768px) {
+  #entry {
+    background-attachment: scroll;
+  }
+  .login-backdrop-overlay {
+    background: radial-gradient(circle at 50% 50%, rgba(8, 13, 23, 0.65) 0%, rgba(8, 13, 23, 0.90) 65%, rgba(8, 13, 23, 0.98) 100%);
+  }
+  .login-ambient-glow {
+    filter: blur(50px);
+    opacity: 0.14;
+  }
+  .login-node-pulse {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

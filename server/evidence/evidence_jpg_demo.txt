@@ -1,0 +1,14 @@
+[INCIDENT CASE #2026-IE3132 - STEGANOGRAPHY]
+ARTEFACT: evidence.jpg
+
+EXIFTOOL METADATA EXTRACT:
+File Name                       : evidence.jpg
+File Size                       : 142 kB
+MIME Type                       : image/jpeg
+Image Description               : CyberTech Surveillance Still #09
+XPComment                       : Steghide Passphrase Clue: 'Aethelred2026'
+
+STEGHIDE EXTRACTION OUTPUT:
+$ steghide extract -sf evidence.jpg -p Aethelred2026
+Extracted secret file "ghost_secret.txt":
+"Stage 4 Completed. The stage flag is: IE3132{stego_demo}. Next cipher key is 'NULLBYTE'."

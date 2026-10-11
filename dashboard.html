@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CyberVault: Dashboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shell min-h-screen flex flex-col">
+
+    <!-- ================= TOPBAR HEADER ================= -->
+    <header class="border-b border-[#263449] sticky top-0 z-20" style="background:#111827">
+      <div class="topbar max-w-[1600px] mx-auto px-4 sm:px-7 py-3 flex items-center justify-between gap-4">
+        <a href="dashboard.html" class="flex items-center gap-3 shrink-0 text-white no-underline">
+          <div class="logo-mark"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+          <div>
+            <div class="font-extrabold text-sm tracking-wide">CYBER<span class="accent">VAULT</span></div>
+            <div class="mono text-[9px] muted tracking-widest">PROJECT NULL BYTE</div>
+          </div>
+        </a>
+
+        <nav aria-label="Main navigation" class="desktop-nav flex items-center gap-1 order-3 lg:order-none">
+          <a href="dashboard.html" class="nav-link active"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</a>
+          <a href="challenges.html" class="nav-link"><i data-lucide="crosshair" class="w-4 h-4"></i> Challenges</a>
+          <a href="scoreboard.html" class="nav-link"><i data-lucide="trophy" class="w-4 h-4"></i> Scoreboard</a>
+          <a href="profile.html" class="nav-link"><i data-lucide="user" class="w-4 h-4"></i> Profile</a>
+          <a href="admin.html" class="nav-link"><i data-lucide="shield-alert" class="w-4 h-4"></i> Admin</a>
+        </nav>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <span id="header-score" class="chip accent" aria-label="Current score">0 PTS</span>
+          <button id="theme-toggle" class="btn !p-2" aria-label="Toggle light and dark theme" type="button" title="Toggle Theme">
+            <i data-lucide="sun-moon" class="w-4 h-4"></i>
+          </button>
+          <div class="relative">
+            <button id="notification-toggle" class="btn !p-2" aria-label="Notifications" aria-expanded="false" type="button" title="Notifications">
+              <i data-lucide="bell" class="w-4 h-4"></i>
+            </button>
+            <div id="notification-menu" class="panel hidden-force absolute right-0 top-12 w-64 p-4 shadow-xl z-30">
+              <p class="font-bold mb-2 text-sm text-white flex items-center gap-2">
+                <i data-lucide="bell-ring" class="w-4 h-4 accent"></i> Notifications
+              </p>
+              <p class="text-xs muted leading-relaxed">Incident response protocols active. Solve CTF challenges to decrypt flags and progress up the leaderboard.</p>
+            </div>
+          </div>
+          <span id="header-name" class="hidden sm:inline mono text-xs font-semibold text-slate-200"></span>
+          <span id="header-role" class="chip accent text-[10px]">OPERATOR</span>
+          <button id="exit-button" class="btn !p-2" aria-label="Exit walkthrough" title="Log Out" type="button">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= MAIN DASHBOARD ================= -->
+    <main class="w-full max-w-[1600px] mx-auto px-4 sm:px-7 py-7 flex-1">
+
+      <!-- Hero Banner -->
+      <section class="panel relative overflow-hidden min-h-[240px] flex items-center mb-7">
+        <div class="hero-overlay"></div>
+        <div class="relative p-7 sm:p-10 max-w-3xl z-10">
+          <p class="mono accent text-xs tracking-[.2em] mb-3">CYBER INCIDENT RESPONSE // MISSION BRIEFING</p>
+          <h1 class="font-extrabold leading-tight text-3xl sm:text-5xl text-white">
+            Welcome back, <span id="welcome-name" class="accent">Operator</span><span class="accent">.</span>
+          </h1>
+          <p class="mt-4 muted max-w-xl leading-relaxed text-sm">
+            Investigate compromised infrastructure, perform forensic analysis on collected artifacts, reverse engineer malware payloads, and neutralize threats.
+          </p>
+          <div class="flex gap-3 flex-wrap mt-6">
+            <span class="chip">RANK <span id="hero-rank" class="accent">#6</span></span>
+            <span class="chip">SCORE <span id="hero-score" class="accent">0</span> PTS</span>
+            <span class="chip accent">INCIDENT: CYBERTECH SOLUTIONS</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dashboard Content Grid -->
+      <div class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_300px] gap-6">
+        <div>
+          <!-- Progress Bar Section -->
+          <div class="panel p-5 mb-6">
+            <div class="flex justify-between gap-3 items-center mb-3">
+              <h2 class="font-bold text-base text-white">Mission Progression</h2>
+              <span id="progress-text" class="mono accent text-sm font-semibold">0/6 CHALLENGES COMPLETED</span>
+            </div>
+            <div class="h-2 rounded-full raised overflow-hidden">
+              <div id="progress-fill" class="h-full rounded-full transition-all duration-500" style="background:#00d97e;width:0%"></div>
+            </div>
+          </div>
+
+          <!-- Section Heading -->
+          <div class="flex justify-between items-end gap-3 mb-4">
+            <div>
+              <p class="mono text-xs accent uppercase">Security Modules</p>
+              <h2 class="font-bold text-xl text-white">Active CTF Operations</h2>
+            </div>
+            <span class="chip font-semibold">6 MODULES</span>
+          </div>
+
+          <!-- Challenges Cards Grid -->
+          <div id="challenge-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Dynamically populated by js/dashboard.js -->
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="space-y-4">
+          <section class="panel p-5">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="font-bold text-base text-white">Leaderboard Preview</h2>
+              <i data-lucide="trophy" class="w-4 h-4 warning"></i>
+            </div>
+            <div id="leader-preview" class="space-y-3 text-sm">
+              <!-- Dynamically populated -->
+            </div>
+            <a href="scoreboard.html" class="btn w-full mt-5 text-center">
+              View Full Scoreboard
+            </a>
+          </section>
+
+          <section class="panel p-5">
+            <h2 class="font-bold text-base text-white mb-4">Recent Lab Activity</h2>
+            <div id="dashboard-activity" class="text-xs space-y-3 muted">
+              <!-- Dynamically populated -->
+            </div>
+          </section>
+
+          <section class="panel p-5">
+            <h2 class="font-bold text-base text-white">Revealed Hints</h2>
+            <p id="hint-count" class="mono accent text-3xl mt-3 font-bold">0</p>
+            <p class="muted text-xs mt-2">Hints deduct 20 points per revelation upon unlock.</p>
+          </section>
+        </aside>
+      </div>
+
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="border-t px-5 py-5 mt-auto" style="border-color:#263449;background:#111827">
+      <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs muted">
+        <span>© CyberVault CTF Platform · SLIIT</span>
+        <span>IE3132 Penetration Testing &amp; Vulnerability Assessment</span>
+        <a class="underline hover:text-[#00ff9d] transition-colors" href="dashboard.html">Back to top</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Shared Modal -->
+  <div id="modal" class="modal-backdrop hidden-force" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-box panel p-7">
+      <div id="modal-icon" class="accent mb-4">
+        <i data-lucide="shield-check" class="w-9 h-9"></i>
+      </div>
+      <h2 id="modal-title" class="text-2xl font-bold text-white"></h2>
+      <p id="modal-message" class="muted mt-3 leading-relaxed text-sm"></p>
+      <pre id="modal-extra" class="mono text-xs accent raised p-4 rounded-lg mt-4 whitespace-pre-wrap hidden-force"></pre>
+      <div class="flex flex-wrap gap-2 mt-7">
+        <button id="modal-confirm" class="btn primary" type="button">Confirm</button>
+        <button id="modal-cancel" class="btn" type="button">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shared Toast -->
+  <div id="toast" class="toast hidden-force" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

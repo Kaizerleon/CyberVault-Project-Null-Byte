@@ -1,0 +1,19 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment and sensitive secrets
+.env
+.env.local
+.env.*.local
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Large challenge binary evidence (if stored in cloud / MongoDB)
+# Keep demo/light files, exclude raw multi-megabyte disks if necessary
+server/evidence/*.dd

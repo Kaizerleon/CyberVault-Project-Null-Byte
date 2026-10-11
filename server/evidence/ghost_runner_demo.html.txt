@@ -1,0 +1,17 @@
+[INCIDENT CASE #2026-IE3132 - REVERSE ENGINEERING]
+TARGET: Ghost Runner (PulseForge Studios Trojanized Game)
+
+JAVASCRIPT RUNTIME INSPECTION:
+Function: checkWinCondition()
+Logic:
+  const _0x91a2 = ["score", "target", "IE3132{reverse_demo}"];
+  function verifyLevel(score) {
+    if (score >= 4000) {
+      console.log("WINNER_FLAG: " + _0x91a2[2]);
+      return _0x91a2[2];
+    }
+  }
+
+DevTools Console Quick Trigger:
+> window.gameState.score = 4000; checkWinCondition();
+Revealed Flag: IE3132{reverse_demo}

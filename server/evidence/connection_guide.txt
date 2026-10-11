@@ -1,0 +1,15 @@
+CYBERVAULT CTF · STAGE 06 (Stage 04: Misconfigured Permissions)
+===============================================================
+Target Service: Linux SSH Challenge Container
+Host: 127.0.0.1 (or Lab CTF VPN IP)
+Port: 2222
+Username: analyst
+Password: cipher2026
+
+Instructions:
+1. Connect via terminal:
+   ssh -p 2222 analyst@127.0.0.1
+2. Investigate user permissions and group membership (id / whoami).
+3. Locate misconfigured backups in /var/backups.
+4. Extract the vault token and query the internal service at 127.0.0.1:9090.
+5. Recover and submit the flag: IE3132{...}

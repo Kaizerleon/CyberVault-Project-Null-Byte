@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ghost Runner - IE3132 CTF Challenge 03</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            background-color: #050811;
+            background-image: 
+                radial-gradient(circle at 50% 20%, rgba(0, 255, 157, 0.08) 0%, transparent 50%),
+                linear-gradient(to bottom, #070d18 0%, #03070d 100%);
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+            user-select: none;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Top Navigation Bar */
+        .nav-bar {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px 16px;
+            background: rgba(10, 25, 20, 0.85);
+            border: 1px solid rgba(0, 255, 157, 0.3);
+            border-radius: 8px;
+            backdrop-filter: blur(8px);
+            z-index: 10;
+        }
+
+        .nav-title {
+            font-size: 13px;
+            color: #88a090;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            background: rgba(0, 255, 157, 0.12);
+            color: #00ff9d;
+            border: 1px solid rgba(0, 255, 157, 0.4);
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .back-btn:hover {
+            background: #00ff9d;
+            color: #050811;
+            box-shadow: 0 0 15px rgba(0, 255, 157, 0.6);
+            transform: translateY(-1px);
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.12),
+                rgba(0, 0, 0, 0.12) 1px,
+                transparent 1px,
+                transparent 3px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow:
+                0 0 10px #00ff00,
+                0 0 20px #00ff00,
+                3px 3px 0 #003300;
+            letter-spacing: 4px;
+            position: relative;
+            z-index: 2;
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 3px 3px 0 #003300; }
+            50% { text-shadow: 0 0 15px #00ff00, 0 0 30px #00ff00, 3px 3px 0 #003300; }
+        }
+
+        #info {
+            margin: 10px 0 15px 0;
+            font-size: 16px;
+            padding: 8px 20px;
+            border: 1px solid #00ff00;
+            border-radius: 5px;
+            background: rgba(0, 20, 0, 0.8);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3), inset 0 0 10px rgba(0, 255, 0, 0.1);
+            position: relative;
+            z-index: 2;
+            backdrop-filter: blur(4px);
+        }
+
+        #info span {
+            color: #ffff00;
+            font-weight: bold;
+            text-shadow: 0 0 8px #ffff00;
+        }
+
+        canvas {
+            border: 2px solid #00ff00;
+            background: #0d0d0d;
+            box-shadow:
+                0 0 20px rgba(0, 255, 0, 0.4),
+                0 0 40px rgba(0, 255, 0, 0.2),
+                inset 0 0 30px rgba(0, 255, 0, 0.05);
+            display: block;
+            position: relative;
+            z-index: 2;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+        }
+
+        #flag-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 20px;
+            z-index: 2;
+        }
+
+        #flag {
+            color: #ffff00;
+            font-size: 20px;
+            padding: 14px 24px;
+            border: 2px solid #ffff00;
+            border-radius: 6px;
+            text-shadow: 0 0 15px #ffff00;
+            animation: pulse 1s infinite;
+            background: rgba(30, 30, 0, 0.9);
+            box-shadow: 0 0 25px rgba(255, 255, 0, 0.5);
+            position: relative;
+            letter-spacing: 1px;
+            word-break: break-all;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); }
+        }
+
+        .win-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: #00ff9d;
+            color: #03070d;
+            border: none;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.7);
+            transition: all 0.2s ease;
+        }
+
+        .win-action-btn:hover {
+            background: #ffffff;
+            color: #000000;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+        #win-msg {
+            display: none;
+            color: #00ff00;
+            font-size: 18px;
+            margin-top: 15px;
+            text-shadow: 0 0 10px #00ff00;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+
+        #controls {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #00cc00;
+            text-shadow: 0 0 5px #00ff00;
+            position: relative;
+            z-index: 2;
+        }
+
+        #reset-btn {
+            margin-top: 12px;
+            padding: 8px 22px;
+            background: rgba(0, 20, 0, 0.8);
+            color: #00ff00;
+            border: 2px solid #00ff00;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 5px #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+        }
+
+        #reset-btn:hover {
+            background: #00ff00;
+            color: #0a0a0a;
+            text-shadow: none;
+            box-shadow: 0 0 25px rgba(0, 255, 0, 0.8);
+            transform: scale(1.05);
+        }
+
+        #reset-btn:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="nav-bar">
+        <span class="nav-title">⚔️ CyberVault · CTF-RE Sandbox</span>
+        <button class="back-btn" onclick="goBackToChallenges()">← Back to Challenge</button>
+    </div>
+
+    <h1>GHOST RUNNER</h1>
+
+    <div id="info">
+        Level: <span id="level">1</span>/<span id="levelTotal">4</span> |
+        Keys: <span id="keys">0</span>/3 |
+        Attempts: <span id="attempts">0</span>
+    </div>
+
+    <canvas id="game" width="400" height="400"></canvas>
+
+    <div id="controls">Use ARROW KEYS to move. Collect 3 keys, then reach the exit.</div>
+
+    <button id="reset-btn" onclick="resetGame()">RESET GAME</button>
+
+    <div id="win-msg">✔ LEVEL 4 COMPLETE — YOU WIN!</div>
+    
+    <div id="flag-container">
+        <div id="flag"></div>
+        <button id="copy-return-btn" class="win-action-btn" onclick="copyFlagAndReturn()">
+            📋 Copy Flag &amp; Return to CyberVault
+        </button>
+    </div>
+
+    <script>
+        // ==========================================
+        // GAME STATE
+        // ==========================================
+        const TOTAL_LEVELS = 4;
+
+        let level = 1;
+        let keysCollected = 0;
+        let attempts = 0;
+        let gameWon = false;
+        let animationId = null;
+
+        let player = { x: 50, y: 50, size: 20, speed: 5 };
+        let exit = { x: 350, y: 350, size: 30 };
+        let ghost = { x: 200, y: 200, size: 20, speed: 0.50 };
+        let keys = [];
+        let obstacles = [];
+
+        // ==========================================
+        // SECRET FLAG (obfuscated in parts)
+        // ==========================================
+        const _0x4a2b = ["IE3132{", "gh0st_pl4ys_", "t0_w1n}"];
+
+        // ==========================================
+        // CANVAS BACKGROUND IMAGE & PARTICLES
+        // ==========================================
+        const bgImage = new Image();
+        let bgLoaded = false;
+        bgImage.onload = () => { bgLoaded = true; };
+        bgImage.src = 'background.png';
+
+        const particles = [];
+        for (let i = 0; i < 40; i++) {
+            particles.push({
+                x: Math.random() * 400,
+                y: Math.random() * 400,
+                size: Math.random() < 0.7 ? 1 : 2,
+                alpha: Math.random() * 0.25 + 0.05,
+                speed: Math.random() * 0.3 + 0.1
+            });
+        }
+
+        function drawCanvasBackground(ctx) {
+            if (bgLoaded) {
+                ctx.drawImage(bgImage, 0, 0, 400, 400);
+                ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+                ctx.fillRect(0, 0, 400, 400);
+            } else {
+                // Retro Grid Matrix style background
+                ctx.fillStyle = "#090d16";
+                ctx.fillRect(0, 0, 400, 400);
+                ctx.strokeStyle = "rgba(0, 255, 100, 0.08)";
+                ctx.lineWidth = 1;
+                for (let x = 0; x <= 400; x += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, 400);
+                    ctx.stroke();
+                }
+                for (let y = 0; y <= 400; y += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(400, y);
+                    ctx.stroke();
+                }
+            }
+
+            particles.forEach(p => {
+                ctx.fillStyle = `rgba(0, 255, 0, ${p.alpha})`;
+                ctx.fillRect(Math.floor(p.x), Math.floor(p.y), p.size, p.size);
+
+                p.y -= p.speed;
+                if (p.y < 0) {
+                    p.y = 400;
+                    p.x = Math.random() * 400;
+                }
+            });
+        }
+
+        // ==========================================
+        // LEVEL CONFIGURATION
+        // Level 3: 2 obstacles
+        // Level 4: 3 obstacles
+        // ==========================================
+        function getLevelConfig(lvl) {
+            const configs = {
+                1: {
+                    keys: [{x: 100, y: 100}, {x: 300, y: 100}, {x: 200, y: 300}],
+                    ghostSpeed: 0.30,
+                    exit: { x: 350, y: 350, size: 30 },
+                    obstacles: []
+                },
+                2: {
+                    keys: [{x: 50, y: 350}, {x: 350, y: 50}, {x: 200, y: 200}],
+                    ghostSpeed: 0.40,
+                    exit: { x: 50, y: 50, size: 30 },
+                    obstacles: []
+                },
+                3: {
+                    keys: [{x: 100, y: 300}, {x: 300, y: 300}, {x: 200, y: 100}],
+                    ghostSpeed: 0.50,
+                    exit: { x: 350, y: 50, size: 30 },
+                    obstacles: [
+                        { x: 150, y: 160, w: 50, h: 50 },
+                        { x: 250, y: 260, w: 50, h: 50 }
+                    ]
+                },
+                4: {
+                    keys: [{x: 50, y: 200}, {x: 350, y: 200}, {x: 200, y: 50}],
+                    ghostSpeed: 1.00,
+                    exit: { x: 200, y: 350, size: 30 },
+                    obstacles: [
+                        { x: 120, y: 120, w: 50, h: 50 },
+                        { x: 230, y: 180, w: 50, h: 50 },
+                        { x: 160, y: 280, w: 50, h: 50 }
+                    ]
+                }
+            };
+            return configs[lvl] || configs[1];
+        }
+
+        // ==========================================
+        // LEVEL SETUP
+        // ==========================================
+        function setupLevel() {
+            const config = getLevelConfig(level);
+
+            keys = config.keys.map(k => ({...k}));
+            keysCollected = 0;
+            ghost.speed = config.ghostSpeed;
+            exit = {...config.exit};
+            obstacles = config.obstacles.map(o => ({...o}));
+
+            player.x = 50;
+            player.y = 50;
+            ghost.x = 200;
+            ghost.y = 200;
+
+            document.getElementById("level").textContent = level;
+            document.getElementById("levelTotal").textContent = TOTAL_LEVELS;
+            document.getElementById("keys").textContent = keysCollected;
+        }
+
+        function resetLevel() {
+            attempts++;
+            document.getElementById("attempts").textContent = attempts;
+            setupLevel();
+        }
+
+        // ==========================================
+        // NEXT LEVEL — Completing Level 4 triggers WIN
+        // ==========================================
+        function nextLevel() {
+            if (level >= TOTAL_LEVELS) {
+                // Final level complete — WIN
+                level = TOTAL_LEVELS + 1;
+                keysCollected = 3;
+                checkWin();
+                return;
+            }
+
+            level++;
+            setupLevel();
+            document.getElementById("level").textContent = level;
+        }
+
+        function resetGame() {
+            level = 1;
+            attempts = 0;
+            gameWon = false;
+            document.getElementById("attempts").textContent = attempts;
+            document.getElementById("flag-container").style.display = "none";
+            document.getElementById("flag").textContent = "";
+            document.getElementById("win-msg").style.display = "none";
+
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+
+            setupLevel();
+            gameLoop();
+        }
+
+        // ==========================================
+        // COLLISION HELPERS
+        // ==========================================
+        function rectsOverlap(a, b) {
+            return a.x < b.x + b.w &&
+                   a.x + a.w > b.x &&
+                   a.y < b.y + b.h &&
+                   a.y + a.h > b.y;
+        }
+
+        function playerHitsObstacle(x, y) {
+            const rect = { x: x, y: y, w: player.size, h: player.size };
+            for (let o of obstacles) {
+                if (rectsOverlap(rect, o)) return true;
+            }
+            return false;
+        }
+
+        function ghostHitsObstacle(x, y) {
+            const rect = { x: x, y: y, w: ghost.size, h: ghost.size };
+            for (let o of obstacles) {
+                if (rectsOverlap(rect, o)) return true;
+            }
+            return false;
+        }
+
+        // ==========================================
+        // GHOST AI (respects obstacles)
+        // ==========================================
+        function updateGhost() {
+            if (player.x > ghost.x) {
+                const nx = ghost.x + ghost.speed;
+                if (!ghostHitsObstacle(nx, ghost.y)) ghost.x = nx;
+            } else if (player.x < ghost.x) {
+                const nx = ghost.x - ghost.speed;
+                if (!ghostHitsObstacle(nx, ghost.y)) ghost.x = nx;
+            }
+
+            if (player.y > ghost.y) {
+                const ny = ghost.y + ghost.speed;
+                if (!ghostHitsObstacle(ghost.x, ny)) ghost.y = ny;
+            } else if (player.y < ghost.y) {
+                const ny = ghost.y - ghost.speed;
+                if (!ghostHitsObstacle(ghost.x, ny)) ghost.y = ny;
+            }
+
+            ghost.x = Math.max(0, Math.min(400 - ghost.size, ghost.x));
+            ghost.y = Math.max(0, Math.min(400 - ghost.size, ghost.y));
+
+            const dx = Math.abs(player.x - ghost.x);
+            const dy = Math.abs(player.y - ghost.y);
+            if (dx < 20 && dy < 20) {
+                resetLevel();
+            }
+        }
+
+        // ==========================================
+        // WIN CONDITION
+        // ==========================================
+        function _0xwin() {
+            if (level > TOTAL_LEVELS && keysCollected === 3) {
+                return true;
+            }
+            return false;
+        }
+
+        function checkWin() {
+            if (_0xwin() && !gameWon) {
+                gameWon = true;
+                revealFlag();
+            }
+        }
+
+        let recoveredFlagValue = "";
+
+        function revealFlag() {
+            recoveredFlagValue = "";
+            for (let i = 0; i < _0x4a2b.length; i++) {
+                recoveredFlagValue += _0x4a2b[i];
+            }
+
+            document.getElementById("win-msg").style.display = "block";
+
+            const flagElement = document.getElementById("flag");
+            flagElement.textContent = "🏁 FLAG: " + recoveredFlagValue;
+            
+            const flagContainer = document.getElementById("flag-container");
+            flagContainer.style.display = "flex";
+
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+
+        function copyFlagAndReturn() {
+            if (recoveredFlagValue) {
+                navigator.clipboard.writeText(recoveredFlagValue).then(() => {
+                    alert("Flag copied to clipboard!\n\nReturning to CyberVault Challenge Workspace...");
+                    goBackToChallenges();
+                }).catch(() => {
+                    goBackToChallenges();
+                });
+            } else {
+                goBackToChallenges();
+            }
+        }
+
+        function goBackToChallenges() {
+            if (window.opener) {
+                window.close();
+            } else {
+                window.location.href = "challenges.html?id=2";
+            }
+        }
+
+        // ==========================================
+        // GAME LOOP
+        // ==========================================
+        function gameLoop() {
+            if (gameWon) return;
+
+            updateGhost();
+            checkCollisions();
+            checkWin();
+            draw();
+
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        function checkCollisions() {
+            for (let i = keys.length - 1; i >= 0; i--) {
+                const dx = Math.abs(player.x - keys[i].x);
+                const dy = Math.abs(player.y - keys[i].y);
+                if (dx < 20 && dy < 20) {
+                    keys.splice(i, 1);
+                    keysCollected++;
+                    document.getElementById("keys").textContent = keysCollected;
+                }
+            }
+
+            if (keysCollected === 3) {
+                const dx = Math.abs(player.x - exit.x);
+                const dy = Math.abs(player.y - exit.y);
+                if (dx < 30 && dy < 30) {
+                    nextLevel();
+                }
+            }
+        }
+
+        // ==========================================
+        // DRAWING
+        // ==========================================
+        function draw() {
+            const canvas = document.getElementById("game");
+            const ctx = canvas.getContext("2d");
+
+            // 1. Background
+            drawCanvasBackground(ctx);
+
+            // 2. Obstacles
+            obstacles.forEach(o => {
+                ctx.fillStyle = "#1a0000";
+                ctx.fillRect(o.x, o.y, o.w, o.h);
+
+                ctx.strokeStyle = "#ff2222";
+                ctx.lineWidth = 3;
+                ctx.shadowColor = "#ff0000";
+                ctx.shadowBlur = 12;
+                ctx.strokeRect(o.x + 1.5, o.y + 1.5, o.w - 3, o.h - 3);
+                ctx.shadowBlur = 0;
+
+                ctx.fillStyle = "rgba(255, 60, 60, 0.55)";
+                for (let py = o.y + 6; py < o.y + o.h - 4; py += 10) {
+                    for (let px = o.x + 6; px < o.x + o.w - 4; px += 10) {
+                        ctx.fillRect(px, py, 5, 5);
+                    }
+                }
+
+                ctx.fillStyle = "#ff8888";
+                ctx.fillRect(o.x, o.y, 5, 5);
+                ctx.fillRect(o.x + o.w - 5, o.y, 5, 5);
+                ctx.fillRect(o.x, o.y + o.h - 5, 5, 5);
+                ctx.fillRect(o.x + o.w - 5, o.y + o.h - 5, 5, 5);
+            });
+
+            // 3. Exit
+            ctx.fillStyle = "#00ff00";
+            ctx.shadowColor = "#00ff00";
+            ctx.shadowBlur = 10;
+            ctx.fillRect(exit.x, exit.y, exit.size, exit.size);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+            ctx.fillRect(exit.x + 4, exit.y + 4, 4, 4);
+
+            // 4. Keys
+            ctx.fillStyle = "#ffff00";
+            ctx.shadowColor = "#ffff00";
+            ctx.shadowBlur = 10;
+            keys.forEach(k => {
+                ctx.fillRect(k.x, k.y, 15, 15);
+                ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+                ctx.fillRect(k.x + 2, k.y + 2, 3, 3);
+                ctx.fillStyle = "#ffff00";
+            });
+
+            // 5. Player
+            ctx.fillStyle = "#0088ff";
+            ctx.shadowColor = "#0088ff";
+            ctx.shadowBlur = 10;
+            ctx.fillRect(player.x, player.y, player.size, player.size);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+            ctx.fillRect(player.x + 12, player.y + 5, 4, 4);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+            ctx.fillRect(player.x + 13, player.y + 6, 2, 2);
+
+            // 6. Ghost
+            ctx.fillStyle = "#ff0000";
+            ctx.shadowColor = "#ff0000";
+            ctx.shadowBlur = 15;
+            ctx.fillRect(ghost.x, ghost.y, ghost.size, ghost.size);
+            ctx.fillStyle = "rgba(255, 255, 255, 0.9)";
+            ctx.fillRect(ghost.x + 4, ghost.y + 5, 4, 4);
+            ctx.fillRect(ghost.x + 12, ghost.y + 5, 4, 4);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.9)";
+            ctx.fillRect(ghost.x + 5, ghost.y + 6, 2, 2);
+            ctx.fillRect(ghost.x + 13, ghost.y + 6, 2, 2);
+
+            ctx.shadowBlur = 0;
+        }
+
+        // ==========================================
+        // KEYBOARD CONTROLS
+        // ==========================================
+        document.addEventListener("keydown", (e) => {
+            if (gameWon) return;
+
+            const speed = player.speed;
+            let newX = player.x;
+            let newY = player.y;
+
+            switch(e.key) {
+                case "ArrowUp":
+                    newY = player.y - speed;
+                    if (newY < 0) newY = 0;
+                    e.preventDefault();
+                    break;
+                case "ArrowDown":
+                    newY = player.y + speed;
+                    if (newY > 400 - player.size) newY = 400 - player.size;
+                    e.preventDefault();
+                    break;
+                case "ArrowLeft":
+                    newX = player.x - speed;
+                    if (newX < 0) newX = 0;
+                    e.preventDefault();
+                    break;
+                case "ArrowRight":
+                    newX = player.x + speed;
+                    if (newX > 400 - player.size) newX = 400 - player.size;
+                    e.preventDefault();
+                    break;
+                default:
+                    return;
+            }
+
+            if (!playerHitsObstacle(newX, newY)) {
+                player.x = newX;
+                player.y = newY;
+            }
+        });
+
+        // ==========================================
+        // START GAME
+        // ==========================================
+        setupLevel();
+        gameLoop();
+    </script>
+</body>
+</html>

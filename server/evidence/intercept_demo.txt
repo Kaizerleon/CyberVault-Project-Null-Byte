@@ -1,0 +1,10 @@
+[INCIDENT CASE #2026-IE3132 - CRYPTOGRAPHY]
+INTERCEPTED PAYLOAD:
+
+--- BASE64 ENCODED VIGENERE CIPHERTEXT ---
+Vk1GQzMzMnt2aWdlbmVyZV9icm9rZW5fY2lwaGVyX3JlY292ZXJlZH0=
+
+--- ANALYSIS STEPS ---
+1. Base64 Decode the text above.
+2. If encrypted with repeating key 'NULLBYTE', decrypt the payload.
+3. Plaintext Flag: IE3132{cipher_demo}

@@ -1,0 +1,36 @@
+[INCIDENT CASE #2026-IE3132 - TECH VANGUARD WHISTLEBLOWER INVESTIGATION]
+CLASSIFICATION: CONFIDENTIAL // CORPORATE ESPIONAGE
+
+EVIDENCE ARTEFACT: DealIsDone.jpg
+Target: Whistleblower "NoOne"
+Company: Tech Vanguard
+Lead Origin: Underground Forum Drop
+
+--- EXIFTOOL METADATA ANALYSIS ---
+File Name                       : DealIsDone.jpg
+File Size                       : 84 kB
+File Type                       : JPEG
+MIME Type                       : image/jpeg
+XPComment                       : aHR0cHM6Ly9wYXN0ZWJpbi5jb20vNDZxeVBZekw=
+ImageDescription                : aHR0cHM6Ly9wYXN0ZWJpbi5jb20vNDZxeVBZekw=
+
+--- SOLVING PATH GUIDE ---
+1. Base64 Decode Clue:
+   aHR0cHM6Ly9wYXN0ZWJpbi5jb20vNDZxeVBZekw= -> https://pastebin.com/46qyPYzL
+
+2. Pastebin Investigation (https://pastebin.com/46qyPYzL):
+   - Found: Tech Vanguard System Backup Log
+   - Email: hal_jordan@protonmail.com
+   - Forum Reference: Tech Vanguard Forums (2019)
+   - Legacy Token (Base64):
+     aHR0cHM6Ly9pdDI0MTAyODAwLmdpdGh1Yi5pby9PU0lOVC90ZWNobmFuZ3VhcmQtZm9ydW0vbWVtYmVyL3Byb2ZpbGUuaHRtbA==
+     -> https://it24102800.github.io/OSINT/techvanguard-forum/member/profile.html
+
+3. Forum Archive Profile:
+   - User Profile: TechVanguard-member-haljordan
+   - Signature link: https://github.com/TechVanguard/Hal-Jordan
+
+4. GitHub Commit History & Secrets Recovery:
+   - Repository: TechVanguard/Hal-Jordan
+   - Action: View Commits -> Inspect 'secrets.txt' (committed then deleted)
+   - Recovered Flag: IE3132{gh0st_1n_th3_m4ch1n3}

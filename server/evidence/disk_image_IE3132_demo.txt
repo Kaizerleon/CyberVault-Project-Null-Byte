@@ -1,0 +1,42 @@
+[INCIDENT CASE #2026-IE3132 - NEXORA DYNAMICS DIGITAL FORENSICS]
+CLASSIFICATION: CONFIDENTIAL // SEIZED FORENSIC EVIDENCE
+
+ARTEFACT: disk_image_IE3132.dd
+SEIZED TARGET: Workstation (Senior SysAdmin)
+FILESYSTEM TYPE: FAT16 Disk Image (10 MB Partition)
+
+--- SLEUTHKIT FORENSIC ANALYSIS SUMMARY ---
+
+1. Reconnaissance:
+   $ file disk_image_IE3132.dd
+   disk_image_IE3132.dd: DOS/MBR boot sector, code offset 0x3c+2, OEM-ID "MSDOS5.0", sectors/cluster 4, root entries 512, sectors 20480 (volumes <=32MB), Media descriptor 0xf8, sectors/FAT 20, sectors/track 32, heads 64, FAT (16 bit)
+
+2. File System Listing (fls):
+   $ fls -r -d disk_image_IE3132.dd
+   r/r * 17: backup_2024.zip (deleted)
+   r/r 18: system_log.txt
+   r/r 19: temp_dump.bin
+
+3. Inode Carving (icat):
+   $ icat disk_image_IE3132.dd 17 > recovered.zip
+   $ unzip -o recovered.zip
+   Archive:  recovered.zip
+    extracting: company_photo.jpg
+
+4. Metadata Analysis (exiftool):
+   $ exiftool company_photo.jpg
+   File Name           : company_photo.jpg
+   ImageDescription    : djRuZ3U0cmQyMDI0
+   XPComment           : Hint: Image Description
+
+5. Base64 Password Decode:
+   $ echo "djRuZ3U0cmQyMDI0" | base64 -d
+   v4ngu4rd2024
+
+6. Steganography Extraction (steghide):
+   $ steghide extract -sf company_photo.jpg -p v4ngu4rd2024 -xf flag.txt -f
+   wrote extracted data to "flag.txt".
+
+7. Recovered Whistleblower Flag:
+   $ cat flag.txt
+   IE3132{gh0st_1n_th3_w0rkst4t10n}

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CyberVault: Operator Registration</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="overflow-x-hidden">
+  <div class="shell min-h-screen flex flex-col">
+
+    <!-- ================= REGISTRATION SCREEN ================= -->
+    <section class="relative min-h-screen flex items-center justify-center p-5 overflow-hidden">
+      <div class="login-glow"></div>
+
+      <div class="absolute top-6 left-6 z-10 flex items-center gap-3">
+        <span class="font-extrabold tracking-widest text-blue-400">SLIIT<span class="text-orange-400">/</span></span>
+        <span class="mono text-xs muted">IE3132 · PENETRATION TESTING CTF LAB</span>
+      </div>
+
+      <main class="relative z-10 w-full max-w-md my-auto py-10">
+        <div class="flex justify-center mb-6">
+          <div class="logo-mark !w-16 !h-16 !rounded-2xl">
+            <i data-lucide="shield-check" class="w-8 h-8"></i>
+          </div>
+        </div>
+
+        <div class="panel p-7 sm:p-9 shadow-2xl" style="background:#111827e8">
+          <div class="mono text-xs accent tracking-[.25em] mb-3">ENROLLMENT // STEP 01</div>
+          <h1 class="font-extrabold tracking-tight leading-tight text-2xl text-white">Create Operator Account</h1>
+          <p class="muted mt-2 mb-6 text-sm leading-relaxed">Register your credentials to access the penetration testing lab and track your solved flags.</p>
+
+          <div class="flex gap-2 mb-6">
+            <span class="chip accent">CTF CADET ENROLLMENT</span>
+            <span class="chip muted">ACCESS CLEARANCE</span>
+          </div>
+
+          <!-- Alert / Error message container -->
+          <div id="reg-feedback" class="hidden-force mb-4 p-3 rounded-lg bg-red-950/80 border border-red-500/50 text-red-300 text-xs mono"></div>
+
+          <form id="register-form" class="space-y-4">
+            <div>
+              <label for="reg-callsign" class="block text-xs font-semibold mb-1 text-slate-200">Operator Callsign / Username *</label>
+              <input id="reg-callsign" class="field" maxlength="24" minlength="2" placeholder="e.g. kaizerleonx" required autocomplete="username">
+            </div>
+
+            <div>
+              <label for="reg-email" class="block text-xs font-semibold mb-1 text-slate-200">Email Address *</label>
+              <input id="reg-email" type="email" class="field" placeholder="name@my.sliit.lk" required autocomplete="email">
+            </div>
+
+            <div>
+              <label for="reg-password" class="block text-xs font-semibold mb-1 text-slate-200">Security Password *</label>
+              <input id="reg-password" type="password" class="field" minlength="6" placeholder="Min. 6 characters" required autocomplete="new-password">
+            </div>
+
+            <div>
+              <label for="reg-confirm-password" class="block text-xs font-semibold mb-1 text-slate-200">Confirm Password *</label>
+              <input id="reg-confirm-password" type="password" class="field" minlength="6" placeholder="Re-enter password" required autocomplete="new-password">
+            </div>
+
+            <button class="btn primary w-full text-sm py-3 font-bold mt-2" type="submit">
+              <span>Register &amp; Launch Lab</span>
+              <i data-lucide="user-plus" class="w-4 h-4"></i>
+            </button>
+          </form>
+
+          <div class="border-t border-slate-800 mt-6 pt-5 text-center text-xs text-slate-400">
+            Already have an operator account? 
+            <a href="index.html" class="accent hover:underline font-bold ml-1">Sign in here</a>
+          </div>
+        </div>
+
+        <p class="relative text-center muted text-xs mt-6">CyberVault CTF Platform · SLIIT Faculty of Computing</p>
+      </main>
+    </section>
+
+  </div>
+
+  <!-- Shared Toast -->
+  <div id="toast" class="toast hidden-force" role="status"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+services:
+  linux-lab:
+    build:
+      context: ./operations/stage04
+      dockerfile: Dockerfile
+    container_name: cybervault-stage4-container
+    ports:
+      - "2222:22"
+    restart: unless-stopped
