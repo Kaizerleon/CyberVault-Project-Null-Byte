@@ -279,3 +279,10 @@ ssh analyst@localhost -p 2222
    docker run -d -p 2222:22 --name cybervault-stage4-container cybervault-stage4
    ```
 6. Log in and start capturing flags!
+
+## 📖 Academic Project and Documentation
+
+Developed as part of **IE3132 – Penetration Testing** at the **Sri Lanka Institute of Information Technology (SLIIT)**.
+
+- Full project report: [Report/readme.md](Report/readme.md)
+- Additional documentation: [docs/readme.md](docs/readme.md)
