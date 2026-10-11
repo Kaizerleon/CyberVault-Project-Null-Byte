@@ -1,0 +1,26 @@
+# PUBLIC REPOSITORY SAFETY: keep all playable artifacts/solutions outside public Git
+admin/
+private/
+participant/
+source-original/
+server-only/
+source/
+testing/
+solutions/
+secrets/
+downloads/
+*.PRIVATE.json
+*.zip
+*.dd
+*.pcap
+*.pcapng
+*.jpg
+*.jpeg
+*.png
+*.txt
+Dockerfile
+entrypoint.sh
+vault_service.py
+*.bak
+solve_*.py
+generate_cipher.py
